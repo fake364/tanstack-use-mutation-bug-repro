@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import {useState} from "react";
+import UnauthenticatedComponent from "./UnauthenticatedComponent";
+import AuthenticatedComponent from "./AuthenticatedComponent";
+import {useQueryClient} from "@tanstack/react-query";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [isAuthenticated, setAuthenticated] = useState(false);
+    const client=useQueryClient();
+    console.log('cache', client.getMutationCache());
+    return (
+        <div className="App">
+            {isAuthenticated && <button
+                onClick={() => setAuthenticated(() => false)}>logout</button>}
+            {isAuthenticated ? <AuthenticatedComponent/> :
+                <UnauthenticatedComponent authenticate={() => setAuthenticated(true)}/>}
+        </div>
+    );
 }
 
 export default App;
